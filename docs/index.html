@@ -62,14 +62,7 @@
 
     .refresh{display:block;margin:16px 12px;padding:14px;background:#1a1a3a;color:#888;text-align:center;border-radius:11px;font-size:14px;text-decoration:none;border:1px solid #252550}
     .footer{text-align:center;padding:16px;font-size:11px;color:#333;line-height:1.7}
-
-    /* QR 常時表示 */
-    .qr-section{background:#13132b;margin:0 12px 12px;padding:16px;border-radius:13px;border:1px solid #22224a;text-align:center}
-    .qr-section h3{font-size:13px;color:#888;margin-bottom:12px;font-weight:600}
-    .qr-wrap{display:inline-block;padding:10px;background:#fff;border-radius:10px;line-height:0}
-    .qr-url{font-size:10px;color:#555;word-break:break-all;margin-top:10px;padding:0 4px}
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
   <div class="header">
@@ -250,34 +243,11 @@
 
   <a href="javascript:location.reload()" class="refresh">🔄 ページを更新</a>
 
-  <!-- QR コード 常時表示 -->
-  <div class="qr-section">
-    <h3>📲 このページのQRコード（iPhoneで開く）</h3>
-    <div class="qr-wrap">
-      <div id="qrcode"></div>
-    </div>
-    <div class="qr-url" id="qrUrl"></div>
-  </div>
-
   <div class="footer">
     <p>データ出典: Yahoo Finance（yfinance 経由）</p>
     <p>次回更新: 翌営業日 14:00 JST</p>
     <p style="margin-top:6px;color:#2a2a4a">投資は自己責任でお願いします</p>
   </div>
 
-  <script>
-    (function() {
-      var url = location.href.split('?')[0].split('#')[0];
-      document.getElementById('qrUrl').textContent = url;
-      new QRCode(document.getElementById('qrcode'), {
-        text: url,
-        width: 180,
-        height: 180,
-        colorDark: '#000000',
-        colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.M
-      });
-    })();
-  </script>
 </body>
 </html>
