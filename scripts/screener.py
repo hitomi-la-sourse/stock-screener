@@ -51,23 +51,7 @@ def get_tse_stocks():
     """JPX から東証上場銘柄リストを取得（CSV 優先、Excel フォールバック）"""
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
 
-    # ① CSV で取得（xlrd 不要・最も安定）
-    csv_url = "https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.csv"
-    try:
-        print("JPX から銘柄リスト取得中（CSV）...")
-        resp = requests.get(csv_url, headers=headers, timeout=60)
-        resp.raise_for_status()
-        df = pd.read_csv(io.BytesIO(resp.content), encoding="cp932")
-        print(f"カラム: {df.columns.tolist()[:8]}")
-        stocks = _parse_stocks_df(df)
-        if stocks:
-            print(f"取得銘柄数（CSV）: {len(stocks)}")
-            return stocks
-        print("CSV: 銘柄が0件のため Excel にフォールバック")
-    except Exception as e:
-        print(f"CSV 取得失敗: {e} → Excel にフォールバック")
-
-    # ② Excel（.xls）で取得
+    # Excel（.xls）で取得（JPX の CSV は 404 のため Excel のみ使用）
     xls_url = "https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.xls"
     try:
         print("JPX から銘柄リスト取得中（Excel）...")
