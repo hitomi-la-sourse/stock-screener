@@ -333,18 +333,11 @@ def generate_html(results, updated_at):
     .refresh{{display:block;margin:16px 12px;padding:14px;background:#1a1a3a;color:#888;text-align:center;border-radius:11px;font-size:14px;text-decoration:none;border:1px solid #252550}}
     .footer{{text-align:center;padding:16px;font-size:11px;color:#333;line-height:1.7}}
 
-    /* QR モーダル */
-    .qr-fab{{position:fixed;bottom:24px;right:16px;width:52px;height:52px;background:#ff5c5c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 16px rgba(255,92,92,.5);cursor:pointer;z-index:200;border:none;color:#fff}}
-    .qr-fab:active{{transform:scale(.94)}}
-    .qr-overlay{{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;align-items:center;justify-content:center}}
-    .qr-overlay.open{{display:flex}}
-    .qr-modal{{background:#13132b;border-radius:18px;padding:24px 20px 20px;text-align:center;width:280px;border:1px solid #252550}}
-    .qr-modal h2{{font-size:15px;font-weight:800;color:#e0e0e0;margin-bottom:4px}}
-    .qr-modal p{{font-size:11px;color:#666;margin-bottom:16px}}
-    .qr-canvas{{margin:0 auto 12px;display:block}}
-    .qr-url{{font-size:10px;color:#555;word-break:break-all;margin-bottom:16px;padding:0 4px}}
-    .qr-close{{display:block;width:100%;padding:11px;background:#1a1a3a;color:#aaa;border:1px solid #252550;border-radius:10px;font-size:14px;cursor:pointer}}
-    .qr-close:active{{background:#252550}}
+    /* QR 常時表示 */
+    .qr-section{{background:#13132b;margin:0 12px 12px;padding:16px;border-radius:13px;border:1px solid #22224a;text-align:center}}
+    .qr-section h3{{font-size:13px;color:#888;margin-bottom:12px;font-weight:600}}
+    .qr-wrap{{display:inline-block;padding:10px;background:#fff;border-radius:10px;line-height:0}}
+    .qr-url{{font-size:10px;color:#555;word-break:break-all;margin-top:10px;padding:0 4px}}
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
@@ -377,49 +370,34 @@ def generate_html(results, updated_at):
 
   <a href="javascript:location.reload()" class="refresh">🔄 ページを更新</a>
 
+  <!-- QR コード 常時表示 -->
+  <div class="qr-section">
+    <h3>📲 このページのQRコード（iPhoneで開く）</h3>
+    <div class="qr-wrap">
+      <div id="qrcode"></div>
+    </div>
+    <div class="qr-url" id="qrUrl"></div>
+  </div>
+
   <div class="footer">
     <p>データ出典: Yahoo Finance（yfinance 経由）</p>
     <p>次回更新: 翌営業日 14:00 JST</p>
     <p style="margin-top:6px;color:#2a2a4a">投資は自己責任でお願いします</p>
   </div>
 
-  <!-- QR フローティングボタン -->
-  <button class="qr-fab" onclick="openQR()" title="QRコードを表示">📲</button>
-
-  <!-- QR モーダル -->
-  <div class="qr-overlay" id="qrOverlay" onclick="closeQR(event)">
-    <div class="qr-modal" onclick="event.stopPropagation()">
-      <h2>📲 このページのQRコード</h2>
-      <p>スキャンして他のデバイスで開く</p>
-      <div id="qrcode" class="qr-canvas"></div>
-      <div class="qr-url" id="qrUrl"></div>
-      <button class="qr-close" onclick="closeQR()">閉じる</button>
-    </div>
-  </div>
-
   <script>
-    var qrGenerated = false;
-    function openQR() {{
+    (function() {{
       var url = location.href.split('?')[0].split('#')[0];
       document.getElementById('qrUrl').textContent = url;
-      if (!qrGenerated) {{
-        new QRCode(document.getElementById('qrcode'), {{
-          text: url,
-          width: 200,
-          height: 200,
-          colorDark: '#ffffff',
-          colorLight: '#13132b',
-          correctLevel: QRCode.CorrectLevel.M
-        }});
-        qrGenerated = true;
-      }}
-      document.getElementById('qrOverlay').classList.add('open');
-    }}
-    function closeQR(e) {{
-      if (!e || e.target === document.getElementById('qrOverlay') || !e.target.classList.contains('qr-modal')) {{
-        document.getElementById('qrOverlay').classList.remove('open');
-      }}
-    }}
+      new QRCode(document.getElementById('qrcode'), {{
+        text: url,
+        width: 180,
+        height: 180,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      }});
+    }})();
   </script>
 </body>
 </html>"""

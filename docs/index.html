@@ -8,20 +8,13 @@
   <title>急騰株ランキング</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:-apple-system,sans-serif;background:#0d0d1f;color:#e0e0e0;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:20px}
-    h1{font-size:20px;color:#ff5c5c;margin-bottom:12px}
+    body{font-family:-apple-system,sans-serif;background:#0d0d1f;color:#e0e0e0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center;gap:24px}
+    h1{font-size:20px;color:#ff5c5c}
     p{color:#666;font-size:14px;line-height:1.8}
-
-    /* QR */
-    .qr-fab{position:fixed;bottom:24px;right:16px;width:52px;height:52px;background:#ff5c5c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 16px rgba(255,92,92,.5);cursor:pointer;z-index:200;border:none;color:#fff}
-    .qr-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;align-items:center;justify-content:center}
-    .qr-overlay.open{display:flex}
-    .qr-modal{background:#13132b;border-radius:18px;padding:24px 20px 20px;text-align:center;width:280px;border:1px solid #252550}
-    .qr-modal h2{font-size:15px;font-weight:800;color:#e0e0e0;margin-bottom:4px}
-    .qr-modal p{font-size:11px;color:#666;margin-bottom:16px}
-    .qr-canvas{margin:0 auto 12px;display:block}
-    .qr-url{font-size:10px;color:#555;word-break:break-all;margin-bottom:16px;padding:0 4px}
-    .qr-close{display:block;width:100%;padding:11px;background:#1a1a3a;color:#aaa;border:1px solid #252550;border-radius:10px;font-size:14px;cursor:pointer}
+    .qr-section{background:#13132b;padding:16px;border-radius:13px;border:1px solid #22224a;text-align:center;width:100%;max-width:280px}
+    .qr-section h3{font-size:13px;color:#888;margin-bottom:12px;font-weight:600}
+    .qr-wrap{display:inline-block;padding:10px;background:#fff;border-radius:10px;line-height:0}
+    .qr-url{font-size:10px;color:#555;word-break:break-all;margin-top:10px}
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
@@ -31,41 +24,27 @@
     <p>初回スクリーニング実行待ちです。<br>GitHub Actions を手動実行するか、<br>次の平日 14:00 JST にお待ちください。</p>
   </div>
 
-  <button class="qr-fab" onclick="openQR()" title="QRコードを表示">📲</button>
-
-  <div class="qr-overlay" id="qrOverlay" onclick="closeQR(event)">
-    <div class="qr-modal" onclick="event.stopPropagation()">
-      <h2>📲 このページのQRコード</h2>
-      <p>スキャンして他のデバイスで開く</p>
-      <div id="qrcode" class="qr-canvas"></div>
-      <div class="qr-url" id="qrUrl"></div>
-      <button class="qr-close" onclick="closeQR()">閉じる</button>
+  <div class="qr-section">
+    <h3>📲 このページのQRコード（iPhoneで開く）</h3>
+    <div class="qr-wrap">
+      <div id="qrcode"></div>
     </div>
+    <div class="qr-url" id="qrUrl"></div>
   </div>
 
   <script>
-    var qrGenerated = false;
-    function openQR() {
+    (function() {
       var url = location.href.split('?')[0].split('#')[0];
       document.getElementById('qrUrl').textContent = url;
-      if (!qrGenerated) {
-        new QRCode(document.getElementById('qrcode'), {
-          text: url,
-          width: 200,
-          height: 200,
-          colorDark: '#ffffff',
-          colorLight: '#13132b',
-          correctLevel: QRCode.CorrectLevel.M
-        });
-        qrGenerated = true;
-      }
-      document.getElementById('qrOverlay').classList.add('open');
-    }
-    function closeQR(e) {
-      if (!e || e.target === document.getElementById('qrOverlay')) {
-        document.getElementById('qrOverlay').classList.remove('open');
-      }
-    }
+      new QRCode(document.getElementById('qrcode'), {
+        text: url,
+        width: 180,
+        height: 180,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    })();
   </script>
 </body>
 </html>
