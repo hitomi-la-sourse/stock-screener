@@ -17,60 +17,73 @@ import time
 JST = timezone(timedelta(hours=9))
 
 
-def get_tse_stocks():
-    """JPX から東証上場銘柄リストを取得"""
-    url = "https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.xls"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-    }
-
+def _parse_stocks_df(df):
+    """DataFrame から {ticker: name} の dict を作る共通処理"""
     stocks = {}
-    try:
-        print("JPX から銘柄リスト取得中...")
-        resp = requests.get(url, headers=headers, timeout=60)
-        resp.raise_for_status()
+    code_col = name_col = None
+    for col in df.columns:
+        cs = str(col)
+        if "コード" in cs and code_col is None:
+            code_col = col
+        if ("銘柄名" in cs or "銘柄" in cs) and name_col is None:
+            name_col = col
 
-        # .xls を読み込む（xlrd が必要）
-        try:
-            df = pd.read_excel(io.BytesIO(resp.content), engine="xlrd")
-        except Exception:
-            df = pd.read_excel(io.BytesIO(resp.content))
-
-        print(f"カラム: {df.columns.tolist()[:8]}")
-
-        code_col = None
-        name_col = None
-        for col in df.columns:
-            cs = str(col)
-            if "コード" in cs:
-                code_col = col
-            if "銘柄名" in cs or ("銘柄" in cs and name_col is None):
-                name_col = col
-
-        if code_col is None:
-            print(f"コードカラムが見つかりません: {df.columns.tolist()}")
-            return {}
-
-        for _, row in df.iterrows():
-            try:
-                raw = str(row[code_col]).strip().split(".")[0]
-                if not raw.isdigit() or len(raw) != 4:
-                    continue
-                code_int = int(raw)
-                # ETF/REIT 等を除外
-                if 1300 <= code_int <= 1699 or 1800 <= code_int <= 1899:
-                    continue
-                name = str(row[name_col]).strip() if name_col else raw
-                stocks[f"{raw}.T"] = name
-            except Exception:
-                continue
-
-        print(f"取得銘柄数: {len(stocks)}")
-        return stocks
-
-    except Exception as e:
-        print(f"JPX からの取得失敗: {e}")
+    if code_col is None:
+        print(f"コードカラムが見つかりません: {df.columns.tolist()}")
         return {}
+
+    for _, row in df.iterrows():
+        try:
+            raw = str(row[code_col]).strip().split(".")[0]
+            if not raw.isdigit() or len(raw) != 4:
+                continue
+            code_int = int(raw)
+            if 1300 <= code_int <= 1699 or 1800 <= code_int <= 1899:
+                continue
+            name = str(row[name_col]).strip() if name_col else raw
+            stocks[f"{raw}.T"] = name
+        except Exception:
+            continue
+    return stocks
+
+
+def get_tse_stocks():
+    """JPX から東証上場銘柄リストを取得（CSV 優先、Excel フォールバック）"""
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+
+    # ① CSV で取得（xlrd 不要・最も安定）
+    csv_url = "https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.csv"
+    try:
+        print("JPX から銘柄リスト取得中（CSV）...")
+        resp = requests.get(csv_url, headers=headers, timeout=60)
+        resp.raise_for_status()
+        df = pd.read_csv(io.BytesIO(resp.content), encoding="cp932")
+        print(f"カラム: {df.columns.tolist()[:8]}")
+        stocks = _parse_stocks_df(df)
+        if stocks:
+            print(f"取得銘柄数（CSV）: {len(stocks)}")
+            return stocks
+        print("CSV: 銘柄が0件のため Excel にフォールバック")
+    except Exception as e:
+        print(f"CSV 取得失敗: {e} → Excel にフォールバック")
+
+    # ② Excel（.xls）で取得
+    xls_url = "https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.xls"
+    try:
+        print("JPX から銘柄リスト取得中（Excel）...")
+        resp = requests.get(xls_url, headers=headers, timeout=60)
+        resp.raise_for_status()
+        df = pd.read_excel(io.BytesIO(resp.content), engine="xlrd")
+        print(f"カラム: {df.columns.tolist()[:8]}")
+        stocks = _parse_stocks_df(df)
+        if stocks:
+            print(f"取得銘柄数（Excel）: {len(stocks)}")
+            return stocks
+    except Exception as e:
+        print(f"Excel 取得失敗: {e}")
+
+    print("銘柄リスト取得失敗")
+    return {}
 
 
 def classify_candle(open_p, high, low, close):
