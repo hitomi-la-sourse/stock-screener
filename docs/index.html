@@ -4,32 +4,120 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#0d0d1f">
   <title>急騰株ランキング</title>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:-apple-system,sans-serif;background:#0d0d1f;color:#e0e0e0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center;gap:24px}
-    h1{font-size:20px;color:#ff5c5c}
-    p{color:#666;font-size:14px;line-height:1.8}
-    .qr-section{background:#13132b;padding:16px;border-radius:13px;border:1px solid #22224a;text-align:center;width:100%;max-width:280px}
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;background:#0d0d1f;color:#e0e0e0;min-height:100vh;padding-bottom:40px}
+    .header{background:linear-gradient(135deg,#12122a,#1a1a3e);padding:14px 16px 12px;position:sticky;top:0;z-index:99;border-bottom:1px solid #252545}
+    .header h1{font-size:17px;font-weight:800;color:#ff5c5c;letter-spacing:.5px}
+    .header .sub{font-size:11px;color:#666;margin-top:2px}
+    .updated{font-size:12px;color:#4caf50;margin-top:3px}
+    .badge{display:inline-block;background:#ff5c5c;color:#fff;font-size:11px;font-weight:700;padding:2px 9px;border-radius:12px;margin-top:5px}
+
+    .cond-box{background:#13132b;margin:12px;padding:11px 13px;border-radius:10px;border:1px solid #22224a}
+    .cond-box h3{font-size:12px;color:#888;margin-bottom:6px;font-weight:600}
+    .cond-box ul{list-style:none;font-size:12px;color:#777;line-height:1.9}
+    .cond-box ul li::before{content:"✓ ";color:#4caf50}
+
+    .warn{background:#1e1200;margin:0 12px 12px;padding:10px 12px;border-radius:8px;border-left:3px solid #ff9800;font-size:12px;color:#ffb74d;line-height:1.6}
+
+    .list{padding:0 12px}
+
+    .card{background:#13132b;border-radius:13px;margin-bottom:12px;border:1px solid #22224a;overflow:hidden}
+    .card-top{display:flex;align-items:center;gap:8px;padding:9px 13px;background:#0f0f24}
+    .rank{font-size:21px;font-weight:900;color:#ff5c5c;min-width:42px}
+    .candle{flex:1;font-size:13px;font-weight:700}
+    .vol-badge{background:#ff5c5c;color:#fff;font-size:13px;font-weight:800;padding:4px 10px;border-radius:20px;white-space:nowrap}
+
+    .card-body{padding:11px 13px}
+    .name-row{display:flex;align-items:baseline;gap:7px;margin-bottom:5px}
+    .code{font-size:15px;font-weight:800;color:#5b9cf6}
+    .name{font-size:13px;color:#bbb;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .price-row{display:flex;align-items:baseline;gap:7px;margin-bottom:3px}
+    .price{font-size:24px;font-weight:900;color:#4caf50}
+    .chg{font-size:13px;font-weight:600}
+    .pos{color:#4caf50}.neg{color:#f44336}
+    .ohlc{font-size:11px;color:#555;margin-bottom:8px}
+
+    .vol-section{margin-bottom:7px}
+    .vol-label{font-size:11px;color:#777;margin-bottom:3px}
+    .vol-track{height:5px;background:#1e1e3e;border-radius:3px;overflow:hidden;margin-bottom:3px}
+    .vol-fill{height:100%;background:linear-gradient(90deg,#ff5c5c,#ff9800);border-radius:3px;transition:width .4s}
+    .vol-num{font-size:11px;color:#888}
+
+    .mktcap{font-size:12px;color:#777;margin-bottom:8px}
+
+    .btns{display:flex;gap:7px;margin-bottom:6px}
+    .btn{flex:1;display:block;text-align:center;padding:8px 2px;background:#1a1a3a;color:#9999cc;text-decoration:none;border-radius:8px;font-size:11px;font-weight:600;border:1px solid #252550}
+    .btn:active{background:#252550}
+
+    .date-tag{font-size:10px;color:#444;text-align:right}
+
+    .no-results{text-align:center;padding:50px 20px;color:#555}
+    .no-icon{font-size:48px;margin-bottom:12px}
+    .no-results p{font-size:14px;margin-bottom:6px}
+    .no-results .sub{font-size:12px;color:#444}
+
+    .refresh{display:block;margin:16px 12px;padding:14px;background:#1a1a3a;color:#888;text-align:center;border-radius:11px;font-size:14px;text-decoration:none;border:1px solid #252550}
+    .footer{text-align:center;padding:16px;font-size:11px;color:#333;line-height:1.7}
+
+    /* QR 常時表示 */
+    .qr-section{background:#13132b;margin:0 12px 12px;padding:16px;border-radius:13px;border:1px solid #22224a;text-align:center}
     .qr-section h3{font-size:13px;color:#888;margin-bottom:12px;font-weight:600}
     .qr-wrap{display:inline-block;padding:10px;background:#fff;border-radius:10px;line-height:0}
-    .qr-url{font-size:10px;color:#555;word-break:break-all;margin-top:10px}
+    .qr-url{font-size:10px;color:#555;word-break:break-all;margin-top:10px;padding:0 4px}
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
-  <div>
+  <div class="header">
     <h1>🚀 短期急騰株ランキング</h1>
-    <p>初回スクリーニング実行待ちです。<br>GitHub Actions を手動実行するか、<br>次の平日 14:00 JST にお待ちください。</p>
+    <div class="sub">東証上場銘柄 スクリーニング</div>
+    <div class="updated">最終更新: 2026年03月19日 14:09 JST (取得エラー)</div>
+    <span class="badge">0 銘柄 該当</span>
   </div>
 
+  <div class="cond-box">
+    <h3>スクリーニング条件</h3>
+    <ul>
+      <li>株価 200〜700 円</li>
+      <li>時価総額 100 億円以下</li>
+      <li>直近 1 ヶ月平均出来高の 2 倍以上（多い順にランキング）</li>
+      <li>陽線・大陽線・上髭陽線（陰線を除外）</li>
+    </ul>
+  </div>
+
+  <div class="warn">
+    ⚠️ <strong>ニュース・IR を必ず確認してください</strong><br>
+    材料あり銘柄は対象外です。各ボタンからニュース・IRの有無をご確認ください。
+  </div>
+
+  <div class="list">
+    
+        <div class="no-results">
+          <div class="no-icon">📭</div>
+          <p>本日は条件に合致する銘柄がありませんでした。</p>
+          <p class="sub">市場休場日や条件が厳しい日には表示されないことがあります。</p>
+        </div>
+  </div>
+
+  <a href="javascript:location.reload()" class="refresh">🔄 ページを更新</a>
+
+  <!-- QR コード 常時表示 -->
   <div class="qr-section">
     <h3>📲 このページのQRコード（iPhoneで開く）</h3>
     <div class="qr-wrap">
       <div id="qrcode"></div>
     </div>
     <div class="qr-url" id="qrUrl"></div>
+  </div>
+
+  <div class="footer">
+    <p>データ出典: Yahoo Finance（yfinance 経由）</p>
+    <p>次回更新: 翌営業日 14:00 JST</p>
+    <p style="margin-top:6px;color:#2a2a4a">投資は自己責任でお願いします</p>
   </div>
 
   <script>
