@@ -62,14 +62,21 @@
 
     .refresh{display:block;margin:16px 12px;padding:14px;background:#1a1a3a;color:#888;text-align:center;border-radius:11px;font-size:14px;text-decoration:none;border:1px solid #252550}
     .footer{text-align:center;padding:16px;font-size:11px;color:#333;line-height:1.7}
+
+    /* QR 常時表示 */
+    .qr-section{background:#13132b;margin:0 12px 12px;padding:16px;border-radius:13px;border:1px solid #22224a;text-align:center}
+    .qr-section h3{font-size:13px;color:#888;margin-bottom:12px;font-weight:600}
+    .qr-wrap{display:inline-block;padding:10px;background:#fff;border-radius:10px;line-height:0}
+    .qr-url{font-size:10px;color:#555;word-break:break-all;margin-top:10px;padding:0 4px}
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
   <div class="header">
     <h1>🚀 短期急騰株ランキング</h1>
     <div class="sub">東証上場銘柄 スクリーニング</div>
-    <div class="updated">最終更新: 2026年03月19日 14:09 JST (取得エラー)</div>
-    <span class="badge">0 銘柄 該当</span>
+    <div class="updated">最終更新: 2026年03月19日 14:15 JST</div>
+    <span class="badge">5 銘柄 該当</span>
   </div>
 
   <div class="cond-box">
@@ -89,14 +96,168 @@
 
   <div class="list">
     
-        <div class="no-results">
-          <div class="no-icon">📭</div>
-          <p>本日は条件に合致する銘柄がありませんでした。</p>
-          <p class="sub">市場休場日や条件が厳しい日には表示されないことがあります。</p>
+        <div class="card">
+          <div class="card-top">
+            <span class="rank">#1</span>
+            <span class="candle">🔥 大陽線</span>
+            <span class="vol-badge">62.59倍</span>
+          </div>
+          <div class="card-body">
+            <div class="name-row">
+              <span class="code">4427</span>
+              <span class="name">ＥｄｕＬａｂ</span>
+            </div>
+            <div class="price-row">
+              <span class="price">¥253</span>
+              <span class="chg pos">(+26.5%)</span>
+            </div>
+            <div class="ohlc">O:197 H:277 L:197</div>
+            <div class="vol-section">
+              <div class="vol-label">出来高倍率</div>
+              <div class="vol-track"><div class="vol-fill" style="width:100%"></div></div>
+              <div class="vol-num">62.59倍 &nbsp;(2,656,500株 / 平均42,440株)</div>
+            </div>
+            <div class="mktcap">時価総額: 25.9億円</div>
+            <div class="btns">
+              <a href="https://finance.yahoo.co.jp/quote/4427.T/news" target="_blank" class="btn">📰 ニュース</a>
+              <a href="https://kabutan.jp/stock/?code=4427" target="_blank" class="btn">📊 株探</a>
+              <a href="https://irbank.net/4427" target="_blank" class="btn">📋 IR</a>
+            </div>
+            <div class="date-tag">データ日: 2026-03-19</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-top">
+            <span class="rank">#2</span>
+            <span class="candle">📈 上髭陽線</span>
+            <span class="vol-badge">4.2倍</span>
+          </div>
+          <div class="card-body">
+            <div class="name-row">
+              <span class="code">4265</span>
+              <span class="name">Ｉｎｓｔｉｔｕｔｉｏｎ　ｆｏｒ　ａ　Ｇｌｏｂａｌ　Ｓｏｃｉｅｔｙ</span>
+            </div>
+            <div class="price-row">
+              <span class="price">¥446</span>
+              <span class="chg neg">(-3.04%)</span>
+            </div>
+            <div class="ohlc">O:428 H:475 L:413</div>
+            <div class="vol-section">
+              <div class="vol-label">出来高倍率</div>
+              <div class="vol-track"><div class="vol-fill" style="width:42%"></div></div>
+              <div class="vol-num">4.2倍 &nbsp;(1,587,800株 / 平均378,480株)</div>
+            </div>
+            <div class="mktcap">時価総額: 21.2億円</div>
+            <div class="btns">
+              <a href="https://finance.yahoo.co.jp/quote/4265.T/news" target="_blank" class="btn">📰 ニュース</a>
+              <a href="https://kabutan.jp/stock/?code=4265" target="_blank" class="btn">📊 株探</a>
+              <a href="https://irbank.net/4265" target="_blank" class="btn">📋 IR</a>
+            </div>
+            <div class="date-tag">データ日: 2026-03-19</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-top">
+            <span class="rank">#3</span>
+            <span class="candle">🔥 大陽線</span>
+            <span class="vol-badge">2.53倍</span>
+          </div>
+          <div class="card-body">
+            <div class="name-row">
+              <span class="code">5025</span>
+              <span class="name">マーキュリー</span>
+            </div>
+            <div class="price-row">
+              <span class="price">¥685</span>
+              <span class="chg pos">(+2.85%)</span>
+            </div>
+            <div class="ohlc">O:667 H:686 L:667</div>
+            <div class="vol-section">
+              <div class="vol-label">出来高倍率</div>
+              <div class="vol-track"><div class="vol-fill" style="width:25%"></div></div>
+              <div class="vol-num">2.53倍 &nbsp;(4,500株 / 平均1,780株)</div>
+            </div>
+            <div class="mktcap">時価総額: 17.7億円</div>
+            <div class="btns">
+              <a href="https://finance.yahoo.co.jp/quote/5025.T/news" target="_blank" class="btn">📰 ニュース</a>
+              <a href="https://kabutan.jp/stock/?code=5025" target="_blank" class="btn">📊 株探</a>
+              <a href="https://irbank.net/5025" target="_blank" class="btn">📋 IR</a>
+            </div>
+            <div class="date-tag">データ日: 2026-03-18</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-top">
+            <span class="rank">#4</span>
+            <span class="candle">📈 上髭陽線</span>
+            <span class="vol-badge">2.52倍</span>
+          </div>
+          <div class="card-body">
+            <div class="name-row">
+              <span class="code">9854</span>
+              <span class="name">愛眼</span>
+            </div>
+            <div class="price-row">
+              <span class="price">¥279</span>
+              <span class="chg pos">(+4.49%)</span>
+            </div>
+            <div class="ohlc">O:270 H:298 L:270</div>
+            <div class="vol-section">
+              <div class="vol-label">出来高倍率</div>
+              <div class="vol-track"><div class="vol-fill" style="width:25%"></div></div>
+              <div class="vol-num">2.52倍 &nbsp;(556,700株 / 平均220,990株)</div>
+            </div>
+            <div class="mktcap">時価総額: 53.8億円</div>
+            <div class="btns">
+              <a href="https://finance.yahoo.co.jp/quote/9854.T/news" target="_blank" class="btn">📰 ニュース</a>
+              <a href="https://kabutan.jp/stock/?code=9854" target="_blank" class="btn">📊 株探</a>
+              <a href="https://irbank.net/9854" target="_blank" class="btn">📋 IR</a>
+            </div>
+            <div class="date-tag">データ日: 2026-03-19</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-top">
+            <span class="rank">#5</span>
+            <span class="candle">📈 上髭陽線</span>
+            <span class="vol-badge">2.13倍</span>
+          </div>
+          <div class="card-body">
+            <div class="name-row">
+              <span class="code">7183</span>
+              <span class="name">あんしん保証</span>
+            </div>
+            <div class="price-row">
+              <span class="price">¥219</span>
+              <span class="chg pos">(+2.34%)</span>
+            </div>
+            <div class="ohlc">O:216 H:231 L:214</div>
+            <div class="vol-section">
+              <div class="vol-label">出来高倍率</div>
+              <div class="vol-track"><div class="vol-fill" style="width:21%"></div></div>
+              <div class="vol-num">2.13倍 &nbsp;(319,600株 / 平均150,225株)</div>
+            </div>
+            <div class="mktcap">時価総額: 37.9億円</div>
+            <div class="btns">
+              <a href="https://finance.yahoo.co.jp/quote/7183.T/news" target="_blank" class="btn">📰 ニュース</a>
+              <a href="https://kabutan.jp/stock/?code=7183" target="_blank" class="btn">📊 株探</a>
+              <a href="https://irbank.net/7183" target="_blank" class="btn">📋 IR</a>
+            </div>
+            <div class="date-tag">データ日: 2026-03-19</div>
+          </div>
         </div>
   </div>
 
   <a href="javascript:location.reload()" class="refresh">🔄 ページを更新</a>
+
+  <!-- QR コード 常時表示 -->
+  <div class="qr-section">
+    <h3>📲 このページのQRコード（iPhoneで開く）</h3>
+    <div class="qr-wrap">
+      <div id="qrcode"></div>
+    </div>
+    <div class="qr-url" id="qrUrl"></div>
+  </div>
 
   <div class="footer">
     <p>データ出典: Yahoo Finance（yfinance 経由）</p>
@@ -104,5 +265,19 @@
     <p style="margin-top:6px;color:#2a2a4a">投資は自己責任でお願いします</p>
   </div>
 
+  <script>
+    (function() {
+      var url = location.href.split('?')[0].split('#')[0];
+      document.getElementById('qrUrl').textContent = url;
+      new QRCode(document.getElementById('qrcode'), {
+        text: url,
+        width: 180,
+        height: 180,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    })();
+  </script>
 </body>
 </html>
